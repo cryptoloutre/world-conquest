@@ -360,7 +360,14 @@ mod world_conquest {
         ctx.accounts.battle.defender_dice_result = defender_dice_result.clone();
         let attacking_territory: u8 = ctx.accounts.battle.attacking_territory;
 
-        for n in 0..ctx.accounts.battle.defender_troops {
+        let mut nb_loop = 0;
+        if (ctx.accounts.battle.defender_troops >= ctx.accounts.battle.attacker_troops) {
+            nb_loop = ctx.accounts.battle.attacker_troops
+        } else {
+            nb_loop = ctx.accounts.battle.defender_troops
+        }
+
+        for n in 0..nb_loop {
             if attacker_dice_result[n as usize] <= defender_dice_result[n as usize] {
                 ctx.accounts.game_master.map[attacking_territory as usize].troops -= 1;
             } else {
@@ -607,87 +614,89 @@ fn get_troops_to_play_next_turn(
     map: &Vec<Territorie>,
     player: Pubkey,
 ) -> u8 {
-    let mut troops: u8 = if turn + 1 < end_preparation_phase {
-        1
+    let mut troops: u8 = 0;
+
+    if turn + 1 < end_preparation_phase {
+        troops = 1
     } else {
         if territories / 3 >= 3 {
-            territories / 3
+            troops = territories / 3
         } else {
-            3
+            troops = 3
+        }
+
+        // Australia  bonus
+        if map[38].ruler == player
+            && map[39].ruler == player
+            && map[40].ruler == player
+            && map[41].ruler == player
+        {
+            troops += 2
+        }
+
+        // South America  bonus
+        if map[9].ruler == player
+            && map[10].ruler == player
+            && map[11].ruler == player
+            && map[12].ruler == player
+        {
+            troops += 2
+        }
+
+        // Africa  bonus
+        if map[20].ruler == player
+            && map[21].ruler == player
+            && map[22].ruler == player
+            && map[23].ruler == player
+            && map[24].ruler == player
+            && map[25].ruler == player
+        {
+            troops += 3
+        }
+
+        // North America  bonus
+        if map[0].ruler == player
+            && map[1].ruler == player
+            && map[2].ruler == player
+            && map[3].ruler == player
+            && map[4].ruler == player
+            && map[5].ruler == player
+            && map[6].ruler == player
+            && map[7].ruler == player
+            && map[8].ruler == player
+        {
+            troops += 5
+        }
+
+        // Europe  bonus
+        if map[13].ruler == player
+            && map[14].ruler == player
+            && map[15].ruler == player
+            && map[16].ruler == player
+            && map[17].ruler == player
+            && map[18].ruler == player
+            && map[19].ruler == player
+        {
+            troops += 5
+        }
+
+        // Asia  bonus
+        if map[26].ruler == player
+            && map[27].ruler == player
+            && map[28].ruler == player
+            && map[29].ruler == player
+            && map[30].ruler == player
+            && map[31].ruler == player
+            && map[32].ruler == player
+            && map[33].ruler == player
+            && map[34].ruler == player
+            && map[35].ruler == player
+            && map[36].ruler == player
+            && map[37].ruler == player
+        {
+            troops += 7
         }
     };
-
-    // Australia  bonus
-    if map[38].ruler == player
-        && map[39].ruler == player
-        && map[40].ruler == player
-        && map[41].ruler == player
-    {
-        troops += 2
-    }
-
-    // South America  bonus
-    if map[9].ruler == player
-        && map[10].ruler == player
-        && map[11].ruler == player
-        && map[12].ruler == player
-    {
-        troops += 2
-    }
-
-    // Africa  bonus
-    if map[20].ruler == player
-        && map[21].ruler == player
-        && map[22].ruler == player
-        && map[23].ruler == player
-        && map[24].ruler == player
-        && map[25].ruler == player
-    {
-        troops += 3
-    }
-
-    // North America  bonus
-    if map[0].ruler == player
-        && map[1].ruler == player
-        && map[2].ruler == player
-        && map[3].ruler == player
-        && map[4].ruler == player
-        && map[5].ruler == player
-        && map[6].ruler == player
-        && map[7].ruler == player
-        && map[8].ruler == player
-    {
-        troops += 5
-    }
-
-    // Europe  bonus
-    if map[13].ruler == player
-        && map[14].ruler == player
-        && map[15].ruler == player
-        && map[16].ruler == player
-        && map[17].ruler == player
-        && map[18].ruler == player
-        && map[19].ruler == player
-    {
-        troops += 5
-    }
-
-    // Asia  bonus
-    if map[26].ruler == player
-        && map[27].ruler == player
-        && map[28].ruler == player
-        && map[29].ruler == player
-        && map[30].ruler == player
-        && map[31].ruler == player
-        && map[32].ruler == player
-        && map[33].ruler == player
-        && map[34].ruler == player
-        && map[35].ruler == player
-        && map[36].ruler == player
-        && map[37].ruler == player
-    {
-        troops += 7
-    }
 
     return troops;
 }

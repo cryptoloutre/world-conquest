@@ -126,7 +126,7 @@ pub fn init_map() -> Vec<Territorie> {
     map[20] = Territorie {
         troops: 0,
         ruler: Pubkey::default(),
-        borders: vec![2, 18, 19, 21, 22, 23],
+        borders: vec![11, 18, 19, 21, 22, 23],
     };
     map[21] = Territorie {
         troops: 0,
