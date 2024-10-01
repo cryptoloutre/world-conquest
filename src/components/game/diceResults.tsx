@@ -9,15 +9,15 @@ export const DiceResults: React.FC<Props> = ({ dices }) => {
     return (
         <div className='flex'>
             {dices.map((dice) => {
-                if (dice == 1)
+                if (dice == 0)
                     return <Dice1Icon size={32} className="mr-2"/>
-                else if (dice == 2)
+                else if (dice == 1)
                     return <Dice2Icon size={32} className="mr-2"/>
-                else if (dice == 3)
+                else if (dice == 2)
                     return <Dice3Icon size={32} className="mr-2"/>
-                else if (dice == 4)
+                else if (dice == 3)
                     return <Dice4Icon size={32} className="mr-2"/>
-                else if (dice == 5)
+                else if (dice == 4)
                     return <Dice5Icon size={32} className="mr-2"/>
                 else return <Dice6Icon size={32} className="mr-2"/>
             })}

@@ -57,29 +57,27 @@ export function getHand(cards: number[]) {
 
 export function isValidCardsCombinaison(card1: number, card2: number, card3: number, playerCards: number[]) {
 
+    const cards = playerCards;
     let isValid = true;
-    const initial_length = playerCards.length;
-
+    const initial_length = cards.length;
     if (!((card1 == card2 && card2 == card3 && card1 <= 2) || (card1 != card2 && card2 != card3 && card1 != card3))) {
         isValid = false
     }
 
-    const index1 = playerCards.find((card) => card == card1);
-    if (index1) {
-        playerCards.splice(index1, 1)
-    }
+    const index1 = cards.indexOf(card1);
+    if (index1 != -1) {
+        cards.splice(index1, 1)
 
-    const index2 = playerCards.find((card) => card == card2);
-    if (index2) {
-        playerCards.splice(index2, 1)
     }
-
-    const index3 = playerCards.find((card) => card == card3);
-    if (index3) {
-        playerCards.splice(index3, 1)
+    const index2 = cards.indexOf(card2);
+    if (index2 != -1) {
+        cards.splice(index2, 1)
     }
-
-    const final_length = playerCards.length;
+    const index3 = cards.indexOf(card3);
+    if (index3 != -1) {
+        cards.splice(index3, 1)
+    }
+    const final_length = cards.length;
 
     if (initial_length - final_length != 3) {
         isValid = false
@@ -93,7 +91,9 @@ export function troopsLost(attackerDiceResult: number[], defenderDiceResult: num
     let attackerLostTroops = 0;
     let defenderLostTroops = 0;
 
-    for (let i = 0; i < defenderDiceResult.length; i++) {
+    const nb_loop = defenderDiceResult.length >= attackerDiceResult.length ? attackerDiceResult.length : defenderDiceResult.length;
+
+    for (let i = 0; i < nb_loop; i++) {
         if (attackerDiceResult[i] <= defenderDiceResult[i]) {
             attackerLostTroops += 1
         }

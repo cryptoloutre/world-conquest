@@ -12,6 +12,9 @@ import { shortAddress } from 'utils/shortAddress';
 import { ContinentBonusInfos } from './continentBonusInfo';
 import { Loader } from 'components/Loader';
 import { DiceResults } from './diceResults';
+import { Attack } from './actions/attack';
+import { Move } from './actions/move';
+import { Deploy } from './actions/deploy';
 
 interface Props {
     gameAddress: String;
@@ -41,13 +44,9 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
     const [card1, setCard1] = useState(9);
     const [card2, setCard2] = useState(9);
     const [card3, setCard3] = useState(9);
-    const [troopsToPlay, setTroopsToPlay] = useState(1);
+    const [troopsToPlay, setTroopsToPlay] = useState(0);
     const [troopsPlayed, setTroopsPlayed] = useState(0);
-    const [troopsToBeDeployed, setTroopsToBeDeployed] = useState(null);
-    const [attackingTroops, setAttackingTroops] = useState(null);
-    const [invadingTroops, setInvadingTroops] = useState(null);
     const [defendingTroops, setDefendingTroops] = useState(null);
-    const [movingTroops, setMovingTroops] = useState(null);
     const [gameId, setGameId] = useState(null);
     const [error, setError] = useState<string>(null);
     const [displayManagePanel, setDisplayManagePanel] = useState(false);
@@ -55,7 +54,6 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
     const [displayClaimBonusPanel, setDisplayClaimBonusPanel] = useState(false);
     const [displayWinnerPanel, setDisplayWinnerPanel] = useState(false);
     const [fromTerritory, setFromTerritory] = useState<number>(null);
-    const [toTerritory, setToTerritory] = useState<number>(null);
     const [battleInfos, setBattleInfos] = useState<{
         hasBattle: boolean,
         attacker: string,
@@ -66,41 +64,69 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
         attackedTerritory: number,
         attackerDiceResult: number[],
         defenderDiceResult: number[],
-        hasConquered: boolean
+        hasConquered: boolean,
+        invasionTroops: number
     }>(null);
     const [action, setAction] = useState<string>('deploy');
 
     const bgColors = [
+        'bg-[#b1b1ff]', //blue
         'bg-[#fece00]', //orange
         'bg-[#FF0000]', //red
-        'bg-[#0000FF]', //blue
         'bg-[#008000]', // green
         'bg-[#FFC0CB]', // pink
         'bg-[#9945FF]', // purple
     ]
 
     const textColors = [
+        'text-[#b1b1ff]', //blue
         'text-[#fece00]', //orange
         'text-[#FF0000]', //red
-        'text-[#0000FF]', //blue
         'text-[#008000]', // green
         'text-[#FFC0CB]', // pink
         'text-[#9945FF]', // purple
     ]
 
-    async function getGameInfos() {
+    async function getUserSolBalance() {
+        const SOLBalance = await connection.getBalance(
+            publicKey,
+            'confirmed'
+        );
+
+        setSOLBalance(SOLBalance)
+    }
+
+    useEffect(() => {
+        if (publicKey) {
+            getUserSolBalance();
+        }
+    }, [publicKey]);
+
+    useEffect(() => {
+        if (publicKey) {
+            getBattleInfos();
+        }
+    }, [publicKey]);
+
+    async function getBattleInfos() {
+        console.log("Game address", gameAddress);
         // @ts-ignore
         const gameMasterInfos = await program.account.gameMaster.fetch(gameMaster);
         const players = gameMasterInfos.players.map((player) => player.toBase58());
-        const bonusCards = gameMasterInfos.cardsPerPlayer.map((hand) => Array.from(hand));
+        const bonusCards = gameMasterInfos.cardsPerPlayer.map((hand) => Array.from(hand.cards));
         const winner = gameMasterInfos.winner.toBase58();
         if (winner != PublicKey.default.toBase58()) {
             setWinner(winner);
             setDisplayWinnerPanel(true);
         }
         const endPreparationPhase = getEndPreparationPhase(players.length);
-        const bonus = gameMasterInfos.claimBonusCounter;
-        setBonusReinforcements(bonus);
+        const bonusCounter = gameMasterInfos.claimBonusCounter;
+        if (bonusCounter < 6) {
+            setBonusReinforcements(2 * (bonusCounter + 1));
+        }
+        else {
+            setBonusReinforcements(5 * bonusCounter - 15);
+        }
         setEndPreparationPhase(endPreparationPhase);
         const territoriesPerPlayers = gameMasterInfos.territoriesPerPlayer;
         const map = gameMasterInfos.map;
@@ -129,56 +155,24 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
         setMapInfos(map);
         console.log(_playersInfos);
         console.log(map);
-    }
-
-    async function getUserSolBalance() {
-        const SOLBalance = await connection.getBalance(
-            publicKey,
-            'confirmed'
-        );
-
-        setSOLBalance(SOLBalance)
-    }
-
-    useEffect(() => {
-        if (publicKey) {
-            getUserSolBalance();
-        }
-    }, [publicKey]);
-
-    useEffect(() => {
-        if (publicKey) {
-            getGameInfos();
-        }
-    }, [publicKey]);
-
-    useEffect(() => {
-        if (!publicKey) { return; }
-        connection.onAccountChange(gameMaster, getGameInfos, "confirmed");
-    });
-
-    async function getBattleInfos() {
         if (turnCounter >= endPreparationPhase) {
             // @ts-ignore
             const battleData = await program.account.battle.fetch(battle);
             console.log("battleData", battleData);
-            const attackingTerritory = battleData.attackingTerritory;
-            const attackedTerritory = battleData.attackedTerritory;
-            const attacker = attackingTerritory ? mapInfos[attackingTerritory].ruler.toBase58() : null;
-            const defender = attackedTerritory ? mapInfos[attackedTerritory].ruler.toBase58() : null;
             const attackerDiceResult: number[] = Array.from(battleData.attackerDiceResult)
             const defenderDiceResult: number[] = Array.from(battleData.defenderDiceResult)
             const battleInfos = {
                 hasBattle: battleData.hasBattle,
-                attacker: attacker,
-                defender: defender,
+                attacker: battleData.attacker.toBase58(),
+                defender: battleData.defender.toBase58(),
                 attackerTroops: battleData.attackerTroops,
                 defenderTroops: battleData.defenderTroops,
-                attackingTerritory: attackingTerritory,
-                attackedTerritory: attackedTerritory,
+                attackingTerritory: battleData.attackingTerritory,
+                attackedTerritory: battleData.attackedTerritory,
                 attackerDiceResult: attackerDiceResult,
                 defenderDiceResult: defenderDiceResult,
-                hasConquered: battleData.hasConquered
+                hasConquered: battleData.hasConquered,
+                invasionTroops: battleData.invasionTroops
             }
             setBattleInfos(battleInfos);
             if (battleData.hasBattle) {
@@ -189,60 +183,90 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
 
     useEffect(() => {
         if (!publicKey) { return; }
-        connection.onAccountChange(battle, getBattleInfos, "confirmed");
+        connection.onAccountChange(gameMaster, (accountInfo) => {
+            const decoded = program.coder.accounts.decode(
+                "GameMaster",
+                accountInfo.data
+            );
+            const players = decoded.players.map((player) => player.toBase58());
+            const bonusCards = decoded.cardsPerPlayer.map((hand) => Array.from(hand.cards));
+            const winner = decoded.winner.toBase58();
+            if (winner != PublicKey.default.toBase58()) {
+                setWinner(winner);
+                setDisplayWinnerPanel(true);
+            }
+            const endPreparationPhase = getEndPreparationPhase(players.length);
+            const bonusCounter = decoded.claimBonusCounter;
+            if (bonusCounter < 6) {
+                setBonusReinforcements(2 * (bonusCounter + 1));
+            }
+            else {
+                setBonusReinforcements(5 * bonusCounter - 15);
+            }
+            setEndPreparationPhase(endPreparationPhase);
+            const territoriesPerPlayers = decoded.territoriesPerPlayer;
+            const map = decoded.map;
+            const turnCounter = Number(decoded.turnCounter);
+            setTurnCounter(turnCounter);
+            setGameId(Number(decoded.id));
+            setTroopsToPlay(decoded.troopsToPlay);
+            setTroopsPlayed(decoded.troopsPlayed);
+
+            const _playersInfos = [];
+            for (let i = 0; i < players.length; i++) {
+                _playersInfos.push({
+                    address: players[i],
+                    territoriesNumber: territoriesPerPlayers[i],
+                    bgColor: bgColors[i],
+                    textColor: textColors[i],
+                    bonusCards: bonusCards[i]
+                })
+            }
+
+            const indexToPlay = turnCounter % _playersInfos.length;
+            const playerToPlayAddress = _playersInfos[indexToPlay].address;
+            setCurrentPlayer(playerToPlayAddress);
+            setPlayersInfos(_playersInfos);
+            setMapInfos(map);
+            console.log(_playersInfos);
+            console.log(map);
+
+        }, "confirmed");
     });
 
-    const deployTroops = async (territory: number, amount: number) => {
-
-        if (!publicKey) {
-            notify({ type: 'error', message: `Wallet not connected!` });
-            console.log('error', `Send Transaction: Wallet not connected!`);
-            return;
-        }
-
-        if (publicKey.toBase58() != currentPlayer) {
-            notify({ type: 'error', message: `Not tour turn to play!` });
-            console.log('error', `Send Transaction: Not tour turn to play!`);
-            return;
-        }
-
-        if (troopsPlayed == troopsToPlay) {
-            notify({ type: 'error', message: `You already deployed all your troops!` });
-            console.log('error', `Send Transaction: You already deployed all your troops!`);
-            return;
-        }
-
-        try {
-            if (SOLBalance <= 0.1 * LAMPORTS_PER_SOL) {
-                await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL)
+    useEffect(() => {
+        if (!publicKey) { return; }
+        connection.onAccountChange(battle, (accountInfo) => {
+            const decoded = program.coder.accounts.decode(
+                "Battle",
+                accountInfo.data
+            );
+            console.log("battleData", decoded);
+            const attackerDiceResult: number[] = Array.from(decoded.attackerDiceResult)
+            const defenderDiceResult: number[] = Array.from(decoded.defenderDiceResult)
+            const battleInfos = {
+                hasBattle: decoded.hasBattle,
+                attacker: decoded.attacker.toBase58(),
+                defender: decoded.defender.toBase58(),
+                attackerTroops: decoded.attackerTroops,
+                defenderTroops: decoded.defenderTroops,
+                attackingTerritory: decoded.attackingTerritory,
+                attackedTerritory: decoded.attackedTerritory,
+                attackerDiceResult: attackerDiceResult,
+                defenderDiceResult: defenderDiceResult,
+                hasConquered: decoded.hasConquered,
+                invasionTroops: decoded.invasionTroops
             }
-            const createDeployTroopsIx = await program.methods
-                .deployTroops(new BN(gameId), amount, territory)
-                .accounts({
-                    gameMaster: gameMaster,
-                    battle: battle,
-                    signer: publicKey,
-                    systemProgram: SystemProgram.programId,
-                })
-                .instruction();
-
-            const transaction = await addCULimit([createDeployTroopsIx], publicKey);
-
-            // Send transaction and await for signature
-            const signature = await sendTransaction(transaction, connection);
-
-            console.log(signature);
-
-        }
-        catch (error) {
-            const err = (error as any)?.message;
-            console.log(err);
-            notify({ type: 'error', message: err });
-        }
-    }
+            setBattleInfos(battleInfos);
+            if (decoded.hasBattle) {
+                setDisplayBattlePanel(true)
+            }
+        }, "confirmed");
+    });
 
     const claimBonus = async (card1: number, card2: number, card3: number) => {
 
+        console.log("combinaison", card1, card2, card3)
         if (!publicKey) {
             notify({ type: 'error', message: `Wallet not connected!` });
             console.log('error', `Send Transaction: Wallet not connected!`);
@@ -280,57 +304,8 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
             const transaction = await addCULimit([claimBonusReinforcementsIx], publicKey)
 
             // Send transaction and await for signature
-            const signature = await sendTransaction(transaction, connection);
-
-            console.log(signature);
-
-        }
-        catch (error) {
-            const err = (error as any)?.message;
-            console.log(err);
-            notify({ type: 'error', message: err });
-        }
-    }
-
-    const initBattle = async (from: number, to: number, attacking: number, invading: number) => {
-
-        if (!publicKey) {
-            notify({ type: 'error', message: `Wallet not connected!` });
-            console.log('error', `Send Transaction: Wallet not connected!`);
-            return;
-        }
-
-        if (publicKey.toBase58() != currentPlayer) {
-            notify({ type: 'error', message: `Not tour turn to play!` });
-            console.log('error', `Send Transaction: Not tour turn to play!`);
-            return;
-        }
-
-        if (turnCounter < endPreparationPhase) {
-            notify({ type: 'error', message: `Can't battle before the end of preparation phase! (End turn ${endPreparationPhase})` });
-            console.log('error', `Send Transaction: Can't battle before the end of preparation phase!`);
-            return;
-        }
-
-        try {
-            if (SOLBalance <= 0.1 * LAMPORTS_PER_SOL) {
-                await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL)
-            }
-            const initBattleIx = await program.methods
-                .initBattle(new BN(gameId), from, to, attacking, invading)
-                .accounts({
-                    gameMaster: gameMaster,
-                    signer: publicKey,
-                    battle: battle,
-                    systemProgram: SystemProgram.programId,
-                })
-                .instruction();
-
-            const transaction = await addCULimit([initBattleIx], publicKey);
-
-            // Send transaction and await for signature
-            const signature = await sendTransaction(transaction, connection);
-
+            const signature = await sendTransaction(transaction, connection, { skipPreflight: true });
+            notify({ type: 'success', message: `Bonus claimed!` });
             console.log(signature);
 
         }
@@ -349,7 +324,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
             return;
         }
 
-        if (publicKey.toBase58() != currentPlayer) {
+        if (publicKey.toBase58() != battleInfos.defender) {
             notify({ type: 'error', message: `Not tour turn to play!` });
             console.log('error', `Send Transaction: Not tour turn to play!`);
             return;
@@ -374,55 +349,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
 
             // Send transaction and await for signature
             const signature = await sendTransaction(transaction, connection);
-
-            console.log(signature);
-
-        }
-        catch (error) {
-            const err = (error as any)?.message;
-            console.log(err);
-            notify({ type: 'error', message: err });
-        }
-    }
-
-    const moveTroops = async (from: number, to: number, moving: number) => {
-
-        if (!publicKey) {
-            notify({ type: 'error', message: `Wallet not connected!` });
-            console.log('error', `Send Transaction: Wallet not connected!`);
-            return;
-        }
-
-        if (publicKey.toBase58() != currentPlayer) {
-            notify({ type: 'error', message: `Not tour turn to play!` });
-            console.log('error', `Send Transaction: Not tour turn to play!`);
-            return;
-        }
-
-        if (turnCounter < endPreparationPhase) {
-            notify({ type: 'error', message: `Can't move troops before the end of preparation phase! (End turn ${endPreparationPhase})` });
-            console.log('error', `Send Transaction: Can't move troops before the end of preparation phase!`);
-            return;
-        }
-
-        try {
-            if (SOLBalance <= 0.1 * LAMPORTS_PER_SOL) {
-                await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL)
-            }
-            const mooveTroopsIx = await program.methods
-                .mooveTroops(new BN(gameId), from, to, moving)
-                .accounts({
-                    gameMaster: gameMaster,
-                    signer: publicKey,
-                    battle: battle,
-                    systemProgram: SystemProgram.programId,
-                })
-                .instruction();
-
-            const transaction = await addCULimit([mooveTroopsIx], publicKey);
-
-            // Send transaction and await for signature
-            const signature = await sendTransaction(transaction, connection);
+            notify({ type: 'success', message: `Battle resolved!` });
 
             console.log(signature);
 
@@ -473,7 +400,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
 
             // Send transaction and await for signature
             const signature = await sendTransaction(transaction, connection);
-
+            notify({ type: 'success', message: `Turn ended` });
             console.log(signature);
 
         }
@@ -868,7 +795,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             !displayManagePanel &&
                                                 setDisplayManagePanel(!displayManagePanel);
                                             setFromTerritory(key);
-                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-4 border-x-4 border-[#FFC4CA]`}>{key}</button>
+                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-4 border-x-4 border-[#ff6272]`}>{key}</button>
                                     )
                                 })}
                                 {mapInfos.map((territory, key) => {
@@ -946,7 +873,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             !displayManagePanel &&
                                                 setDisplayManagePanel(!displayManagePanel);
                                             setFromTerritory(key);
-                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-[#FFC4CA]`}>{key}</button>
+                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-[#ff6272]`}>{key}</button>
                                     )
                                 })}
                                 {mapInfos.map((territory, key) => {
@@ -1012,7 +939,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             !displayManagePanel &&
                                                 setDisplayManagePanel(!displayManagePanel);
                                             setFromTerritory(key);
-                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-2 col-end-4 border-t-2 border-l-4 border-r-2 border-[#FFC4CA]`}>{key}</button>
+                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-2 col-end-4 border-t-2 border-l-4 border-r-2 border-[#ff6272]`}>{key}</button>
                                     )
                                 })}
                                 {mapInfos.map((territory, key) => {
@@ -1023,7 +950,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             !displayManagePanel &&
                                                 setDisplayManagePanel(!displayManagePanel);
                                             setFromTerritory(key);
-                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-4 col-span-4 border-t-2 border-r-4 border-[#FFC4CA]`}>{key}</button>
+                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-4 col-span-4 border-t-2 border-r-4 border-[#ff6272]`}>{key}</button>
                                     )
                                 })}
                                 {mapInfos.map((territory, key) => {
@@ -1082,7 +1009,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                         }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-1 border-t-2 border-b-4 border-r-4 border-[#02D8E9]`}>{key}</button>
                                     )
                                 })}
-                                <div className={`p-2 border-t-4 border-[#FFC4CA] col-start-2`}></div>
+                                <div className={`p-2 border-t-4 border-[#ff6272] col-start-2`}></div>
                                 {mapInfos.map((territory, key) => {
                                     const index = playersInfos.find((n) => n.address == territory.ruler.toBase58());
                                     return (
@@ -1091,10 +1018,10 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             !displayManagePanel &&
                                                 setDisplayManagePanel(!displayManagePanel);
                                             setFromTerritory(key);
-                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-b-4 border-[#FFC4CA]`}>{key}</button>
+                                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-b-4 border-[#ff6272]`}>{key}</button>
                                     )
                                 })}
-                                <div className={`p-2 border-t-4 border-[#FFC4CA] col-span-3`}></div>
+                                <div className={`p-2 border-t-4 border-[#ff6272] col-span-3`}></div>
                                 <div className={`p-2 border-t-4 border-[#14F195] col-span-2`}></div>
                                 {mapInfos.map((territory, key) => {
                                     const index = playersInfos.find((n) => n.address == territory.ruler.toBase58());
@@ -1222,103 +1149,18 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
 
                                     </div>
                                     {action == "deploy" &&
-                                        <div className='flex flex-col mt-6 mb-4'>
-                                            <input
-                                                className='mx-4 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Number of troops to be deployed..."
-                                                value={troopsToBeDeployed}
-                                                onChange={(e) => setTroopsToBeDeployed(parseInt(e.target.value))}
-                                                min={1}
-                                                max={troopsToPlay - troopsPlayed}
-                                            >
-                                            </input>
-
-                                            <label className='ml-4' >Max: {troopsToPlay - troopsPlayed}</label>
-                                            <button onClick={() => deployTroops(fromTerritory, troopsToBeDeployed)} className='rounded-xl border border-[#c8ab6e] m-auto p-2'>Deploy</button>
-                                        </div>
+                                        <Deploy playersInfos={playersInfos} fromTerritory={fromTerritory} turnCounter={turnCounter} troopsToPlay={troopsToPlay}
+                                            troopsPlayed={troopsPlayed} gameId={gameId} gameMaster={gameMaster} battle={battle} SOLBalance={SOLBalance} />
                                     }
                                     {action == "attack" &&
-                                        <div className='flex flex-col mt-6 mb-4'>
-                                            <input
-                                                className='mx-4 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Territory to attack..."
-                                                value={toTerritory}
-                                                onChange={(e) => setToTerritory(parseInt(e.target.value))}
-                                            >
-                                            </input>
-                                            <label className='ml-4 mb-2' >Possibilities:
-                                                <span className='flex justify-around'>
-                                                    {
-                                                        Array.from(mapInfos[fromTerritory].borders).map((t, key) => {
-                                                            // @ts-ignore
-                                                            return (<span key={key} className=''>{t} ({mapInfos[t].troops} troops)</span>)
-                                                        })
-                                                    }
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                className='mx-4 pl-2 mb-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Number of troops used in battle..."
-                                                value={attackingTroops}
-                                                onChange={(e) => setAttackingTroops(parseInt(e.target.value))}
-                                                min={1}
-                                                max={mapInfos[fromTerritory].troops - 1 < 3 ? mapInfos[fromTerritory].troops - 1 : 3}
-                                            >
-                                            </input>
-                                            {turnCounter >= endPreparationPhase && <label className='ml-4 mb-2' >Max: {mapInfos[fromTerritory].troops - 1 < 3 ? mapInfos[fromTerritory].troops - 1 : 3}</label>}
-                                            <input
-                                                className='mx-4 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Number of troops used for the invasion..."
-                                                value={invadingTroops}
-                                                onChange={(e) => setInvadingTroops(parseInt(e.target.value))}
-                                                min={1}
-                                                max={mapInfos[fromTerritory].troops > 1 && mapInfos[fromTerritory].troops - 1}
-                                            >
-                                            </input>
-                                            {turnCounter >= endPreparationPhase && <label className='ml-4' >Max: {mapInfos[fromTerritory].troops - 1}</label>}
-                                            <button onClick={() => initBattle(fromTerritory, toTerritory, attackingTroops, invadingTroops)} className='rounded-xl border border-[#c8ab6e] mt-2 m-auto p-2'>Init Battle</button>
-                                        </div>
+                                        <Attack mapInfos={mapInfos} playersInfos={playersInfos} fromTerritory={fromTerritory}
+                                            turnCounter={turnCounter} endPreparationPhase={endPreparationPhase} gameId={gameId}
+                                            gameMaster={gameMaster} battle={battle} SOLBalance={SOLBalance} />
                                     }
                                     {action == "move" &&
-                                        <div className='flex flex-col mt-6 mb-4'>
-                                            <input
-                                                className='mx-4 mb-2 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Destination territory..."
-                                                value={toTerritory}
-                                                onChange={(e) => setToTerritory(parseInt(e.target.value))}
-                                            >
-                                            </input>
-                                            <label className='ml-4 mb-2' >Possibilities:
-                                                <span className='flex justify-around'>
-                                                    {
-                                                        Array.from(mapInfos[fromTerritory].borders).map((t, key) => {
-
-                                                            return (
-                                                                // @ts-ignore
-                                                                <span key={key} className=''>{t} ({mapInfos[t].troops} troops)</span>)
-                                                        })
-                                                    }
-                                                </span>
-                                            </label>
-                                            <input
-                                                className='mx-4 mb-2 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
-                                                type='number'
-                                                placeholder="Number of troops to move..."
-                                                value={movingTroops}
-                                                onChange={(e) => setMovingTroops(parseInt(e.target.value))}
-                                                min={1}
-                                                max={mapInfos[fromTerritory].troops - 1 >= 0 && mapInfos[fromTerritory].troops - 1}
-                                            >
-                                            </input>
-                                            {turnCounter >= endPreparationPhase && <label className='ml-4' >Max: {mapInfos[fromTerritory].troops - 1}</label>}
-                                            <button onClick={() => moveTroops(fromTerritory, toTerritory, movingTroops)} className='rounded-xl border border-[#c8ab6e] mt-2 m-auto p-2'>Move Troops</button>
-                                        </div>
+                                        <Move mapInfos={mapInfos} playersInfos={playersInfos} fromTerritory={fromTerritory}
+                                            turnCounter={turnCounter} endPreparationPhase={endPreparationPhase} gameId={gameId}
+                                            gameMaster={gameMaster} battle={battle} SOLBalance={SOLBalance} />
                                     }
                                 </div>
                             }
@@ -1345,11 +1187,11 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                                         value={defendingTroops}
                                                         onChange={(e) => setDefendingTroops(parseInt(e.target.value))}
                                                         min={1}
-
+                                                        max={mapInfos[battleInfos.attackedTerritory].troops >= 2 ? 2 : mapInfos[battleInfos.attackedTerritory].troops}
                                                     >
                                                     </input>
 
-                                                    <label className='ml-4 text-[#c8ab6e]' >Max:</label>
+                                                    <label className='ml-4 text-[#c8ab6e]' >Max: {mapInfos[battleInfos.attackedTerritory].troops >= 2 ? 2 : mapInfos[battleInfos.attackedTerritory].troops}</label>
                                                     <button onClick={() => resolveBattle(defendingTroops)} className='rounded-xl text-[#c8ab6e] border border-white m-auto p-2'>Resolve Battle</button>
                                                 </div>
                                                 :
@@ -1375,11 +1217,11 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                                             <div className='text-left ml-4 mt-2'>Attacker Dice Results ({troopsLost(battleInfos.attackerDiceResult, battleInfos.defenderDiceResult).attackerLostTroops} troop(s) lost)
                                                 <DiceResults dices={battleInfos.attackerDiceResult} />
                                             </div>
-                                            <div className='text-left ml-4 mt-2'>Defender Dice Results ({troopsLost(battleInfos.attackerDiceResult, battleInfos.defenderDiceResult).defenderLostTroops} troop(s) lost)
+                                            <div className='text-left ml-4 my-2'>Defender Dice Results ({troopsLost(battleInfos.attackerDiceResult, battleInfos.defenderDiceResult).defenderLostTroops} troop(s) lost)
                                                 <DiceResults dices={battleInfos.defenderDiceResult} />
                                             </div>
-                                            {battleInfos.hasConquered &&
-                                                <div className='text-left ml-4 my-2'>
+                                            {mapInfos[battleInfos.attackedTerritory].ruler.toBase58() == battleInfos.attacker &&
+                                                <div className='text-left ml-4 mb-2'>
                                                     <span className={`${playersInfos.find((player) => player.address == battleInfos.attacker).textColor} mr-2 font-bold`}>{shortAddress(battleInfos.attacker)}</span>has conquered a new territory!
                                                 </div>
                                             }
@@ -1483,7 +1325,6 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
                             }
                         </div>
                         <ContinentBonusInfos />
-
                     </div>
                 }
             </div>
