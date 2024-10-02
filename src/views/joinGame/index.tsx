@@ -95,71 +95,71 @@ export const JoinGameView: FC = ({ }) => {
         <div className="text-left">
 
           {!gamesFetched && publicKey && <div>Fetching...</div>}
-
-          <div>
+          {gamesFetched && gameAddress == "" &&
             <div>
-              <div className="text-left text-2xl font-bold mb-2 underline">Ongoing Game</div>
-              <div className="grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-5">
-                {myOngoingGames.length != 0 ? myOngoingGames.map((game) =>
-                  game.winner == PublicKey.default.toBase58() &&
-                  (
-                    <Card key={game.id} className="border-secondary group-hover:border-white">
-                      <CardHeader>
-                        <CardTitle className="space-y-3">
-                          <span className="block font-bold group-hover:text-pretty">
-                            Game #{game.id}
-                          </span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="text-center">
-                        {game.players.map((player, key) => (
-                          <div key={key} className="">
-                            {shortAddress(player)}
-                            {key < game.players.length - 1 && <div className="flex justify-center"><SwordsIcon /></div>}
-                          </div>
-                        )
+              <div>
+                <div className="text-left text-2xl font-bold mb-2 underline">Ongoing Game</div>
+                <div className="grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-5">
+                  {myOngoingGames.length != 0 ? myOngoingGames.map((game) =>
+                    game.winner == PublicKey.default.toBase58() &&
+                    (
+                      <Card key={game.id} className="border-secondary group-hover:border-white">
+                        <CardHeader>
+                          <CardTitle className="space-y-3">
+                            <span className="block font-bold group-hover:text-pretty">
+                              Game #{game.id}
+                            </span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-center">
+                          {game.players.map((player, key) => (
+                            <div key={key} className="">
+                              {shortAddress(player)}
+                              {key < game.players.length - 1 && <div className="flex justify-center"><SwordsIcon /></div>}
+                            </div>
+                          )
 
-                        )}
-                        <button onClick={() => setGameAddress(game.game)} className="mt-2 bg-[#312d29] border border-[#c8ab6e] py-1 px-3 rounded-lg uppercase font-bold">join</button>
-                      </CardContent>
-                    </Card>
-                  )) : <div>No game found...</div>}
+                          )}
+                          <button onClick={() => setGameAddress(game.game)} className="mt-2 bg-[#312d29] border border-[#c8ab6e] py-1 px-3 rounded-lg uppercase font-bold">join</button>
+                        </CardContent>
+                      </Card>
+                    )) : <div>No game found...</div>}
 
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="text-left text-2xl font-bold mb-2 underline">Game Finished</div>
+                <div className="grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-5">
+                  {myFinishedGames.length != 0 ? myFinishedGames.map((game) =>
+                    game.winner != PublicKey.default.toBase58() &&
+                    (
+                      <Card key={game.id} className="border-secondary group-hover:border-white">
+                        <CardHeader>
+                          <CardTitle className="space-y-3">
+                            <span className="block font-bold group-hover:text-pretty">
+                              Game #{game.id}
+                            </span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-center">
+                          {game.players.map((player, key) => (
+                            <div key={key} className="">
+                              {shortAddress(player)}
+                              {key < game.players.length - 1 && <div className="flex justify-center"><SwordsIcon /></div>}
+                            </div>
+                          )
+
+                          )}
+                          <button onClick={() => setGameAddress(game.game)} className="mt-2 bg-[#312d29] border border-[#c8ab6e] py-1 px-3 rounded-lg uppercase font-bold">join</button>
+                        </CardContent>
+                      </Card>
+                    ))
+                    : <div>No game found...</div>}
+                </div>
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-left text-2xl font-bold mb-2 underline">Game Finished</div>
-              <div className="grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-5">
-                {myFinishedGames.length != 0 ? myFinishedGames.map((game) =>
-                  game.winner != PublicKey.default.toBase58() &&
-                  (
-                    <Card key={game.id} className="border-secondary group-hover:border-white">
-                      <CardHeader>
-                        <CardTitle className="space-y-3">
-                          <span className="block font-bold group-hover:text-pretty">
-                            Game #{game.id}
-                          </span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="text-center">
-                        {game.players.map((player, key) => (
-                          <div key={key} className="">
-                            {shortAddress(player)}
-                            {key < game.players.length - 1 && <div className="flex justify-center"><SwordsIcon /></div>}
-                          </div>
-                        )
 
-                        )}
-                        <button onClick={() => setGameAddress(game.game)} className="mt-2 bg-[#312d29] border border-[#c8ab6e] py-1 px-3 rounded-lg uppercase font-bold">join</button>
-                      </CardContent>
-                    </Card>
-                  ))
-                  : <div>No game found...</div>}
-              </div>
-            </div>
-          </div>
-
-
+          }
           {gameAddress != "" && <Game gameAddress={gameAddress} setGameAddress={setGameAddress} />}
         </div>
       </div>
