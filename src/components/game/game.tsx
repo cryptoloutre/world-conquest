@@ -296,7 +296,7 @@ export const Game: React.FC<Props> = ({ gameAddress, setGameAddress }) => {
             const signature = await sendTransaction(transaction, connection);
             notify({ type: 'success', message: `Turn ended` });
             console.log(signature);
-
+            
         }
         catch (error) {
             const err = (error as any)?.message;

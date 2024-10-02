@@ -74,7 +74,7 @@ export const Deploy: React.FC<Props> = ({ playersInfos, gameId, gameMaster, batt
             const signature = await sendTransaction(transaction, connection);
             notify({ type: 'success', message: `Troops deployed` });
             console.log(signature);
-
+            
         }
         catch (error) {
             const err = (error as any)?.message;

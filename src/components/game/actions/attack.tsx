@@ -114,7 +114,7 @@ export const Attack: React.FC<Props> = ({ mapInfos, playersInfos, gameId, gameMa
                 : <div className='mx-4 mb-2'>No valid border territories to attack</div>
             }
             <input
-                className='mx-4 pl-2 mb-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
+                className='mx-4 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
                 type='number'
                 placeholder="Number of troops used in battle..."
                 value={attackingTroops}
@@ -123,7 +123,7 @@ export const Attack: React.FC<Props> = ({ mapInfos, playersInfos, gameId, gameMa
                 max={mapInfos[fromTerritory].troops - 1 < 3 ? mapInfos[fromTerritory].troops - 1 : 3}
             >
             </input>
-            {turnCounter >= endPreparationPhase && <label className='ml-4 mb-2' >Max: {mapInfos[fromTerritory].troops - 1 < 3 ? mapInfos[fromTerritory].troops - 1 : 3}</label>}
+            {turnCounter >= endPreparationPhase && <label className='ml-4' >Max: {mapInfos[fromTerritory].troops - 1 < 3 ? mapInfos[fromTerritory].troops - 1 : 3}</label>}
             <input
                 className='mx-4 pl-2 border-2 rounded-xl border-[#c8ab6e] bg-[#312d29]'
                 type='number'

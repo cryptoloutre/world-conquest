@@ -75,7 +75,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-white font-bold`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-white font-bold`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -85,7 +85,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-4 border-r-2 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-4 border-r-2 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -96,7 +96,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-4 col-span-2 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-4 col-span-2 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -107,7 +107,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-l-4 border-r-2 border-[#B65805] col-span-2`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-l-4 border-r-2 border-[#B65805] col-span-2`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -118,7 +118,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-[#B65805] col-span-4`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-[#B65805] col-span-4`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -140,7 +140,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-l-4 col-span-2 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-l-4 col-span-2 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -151,7 +151,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 col-span-2 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 col-span-2 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -162,7 +162,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-2 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -173,7 +173,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-4 col-span-2 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-4 border-r-4 col-span-2 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -195,7 +195,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-l-4 border-r-2 col-start-1 col-end-3 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-l-4 border-r-2 col-start-1 col-end-3 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -206,7 +206,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 col-span-3 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 col-span-3 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -217,7 +217,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#B65805]`}></div>
@@ -229,7 +229,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-l-4 border-r-2 border-[#B65805] col-start-8 col-span-2`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-l-4 border-r-2 border-[#B65805] col-start-8 col-span-2`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -240,7 +240,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#B65805] col-span-3`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#B65805] col-span-3`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -251,7 +251,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-r-4 border-[#B65805]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-r-4 border-[#B65805]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -284,7 +284,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#02D8E9] col-span-1`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#02D8E9] col-span-1`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -306,7 +306,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-2 border-b-4 border-l-4 border-r-2 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-2 border-b-4 border-l-4 border-r-2 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -317,7 +317,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-2 border-b-4 border-r-4 border-white`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-3 border-t-2 border-b-4 border-r-4 border-white`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#B65805] col-start-8`}></div>
@@ -329,7 +329,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-b-4 border-l-4 border-r-2 border-[#B65805] col-start-9 col-span-2`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-b-4 border-l-4 border-r-2 border-[#B65805] col-start-9 col-span-2`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -340,7 +340,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#B65805] col-span-2`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-2 border-[#B65805] col-span-2`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -373,7 +373,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-x-2 border-[#02D8E9] col-span-2`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-x-2 border-[#02D8E9] col-span-2`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -384,7 +384,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-[#02D8E9] col-span-3`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-[#02D8E9] col-span-3`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -395,7 +395,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 border-t-2 border-r-4 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -406,7 +406,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-4 border-x-4 border-[#ff6272]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-4 border-x-4 border-[#ff6272]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -450,7 +450,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-14 border-l-4 col-span-1 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-14 border-l-4 col-span-1 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -484,7 +484,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-[#ff6272]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-[#ff6272]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -506,7 +506,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-11 col-span-1 border-t-4 border-r-4 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-11 col-span-1 border-t-4 border-r-4 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -517,7 +517,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-12 col-span-3 border-t-4 border-l-4 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-12 col-span-3 border-t-4 border-l-4 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -528,7 +528,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-15 col-span-1 border-t-4 border-x-2 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-15 col-span-1 border-t-4 border-x-2 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -550,7 +550,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-2 col-end-4 border-t-2 border-l-4 border-r-2 border-[#ff6272]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-2 col-end-4 border-t-2 border-l-4 border-r-2 border-[#ff6272]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -561,7 +561,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-4 col-span-4 border-t-2 border-r-4 border-[#ff6272]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-4 col-span-4 border-t-2 border-r-4 border-[#ff6272]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -583,7 +583,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-1 border-r-2 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-span-1 border-r-2 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -594,7 +594,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-11 col-span-2 border-t-2 border-r-4 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-11 col-span-2 border-t-2 border-r-4 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#02D8E9] col-span-2`}></div>
@@ -617,7 +617,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-1 border-t-2 border-b-4 border-r-4 border-[#02D8E9]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-1 border-t-2 border-b-4 border-r-4 border-[#02D8E9]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#ff6272] col-start-2`}></div>
@@ -629,7 +629,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-b-4 border-[#ff6272]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-3 col-end-5 border-t-2 border-x-4 border-b-4 border-[#ff6272]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#ff6272] col-span-3`}></div>
@@ -642,7 +642,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-10 border-t-2 border-l-4 border-r-2 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-10 border-t-2 border-l-4 border-r-2 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -664,7 +664,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-12 border-t-2 border-r-4 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-12 border-t-2 border-r-4 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 <div className={`p-2 border-t-4 border-[#02D8E9] col-start-15`}></div>
@@ -676,7 +676,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-1 border-t-4 border-l-4 border-r-2 border-[#FF8C00]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-1 border-t-4 border-l-4 border-r-2 border-[#FF8C00]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -687,7 +687,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-17 col-span-2 border-t-4 border-r-4 border-[#FF8C00]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-17 col-span-2 border-t-4 border-r-4 border-[#FF8C00]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -698,7 +698,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-10 col-span-2 border-l-4 border-t-2 border-r-2 border-b-4 border-[#14F195]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-10 col-span-2 border-l-4 border-t-2 border-r-2 border-b-4 border-[#14F195]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -720,7 +720,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-2 border-b-4 border-r-2 border-l-4 border-t-2 border-[#FF8C00]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-16 col-span-2 border-b-4 border-r-2 border-l-4 border-t-2 border-[#FF8C00]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
                 {mapInfos.map((territory, key) => {
@@ -731,7 +731,7 @@ export const GameBoard: React.FC<Props> = ({
                             !displayManagePanel &&
                                 setDisplayManagePanel(!displayManagePanel);
                             setFromTerritory(key);
-                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-18 col-span-1 border-b-4 border-t-2 border-r-4 border-[#FF8C00]`}>{key}</button>
+                        }} className={`${index ? index.bgColor : "bg-[#556655]"} p-2 col-start-18 col-span-1 border-b-4 border-t-2 border-r-4 border-[#FF8C00]`}>{key} <span className="text-xs">({territory.troops})</span></button>
                     )
                 })}
             </div>
