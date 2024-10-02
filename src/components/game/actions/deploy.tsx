@@ -13,7 +13,7 @@ interface Props {
     troopsToPlay: number,
     troopsPlayed: number,
     gameId: number,
-    gameMaster: PublicKey
+    gameMaster: PublicKey,
     battle: PublicKey,
     SOLBalance: number,
 }

@@ -13,7 +13,7 @@ interface Props {
     turnCounter: number,
     endPreparationPhase: number,
     gameId: number,
-    gameMaster: PublicKey
+    gameMaster: PublicKey,
     battle: PublicKey,
     SOLBalance: number,
 }
