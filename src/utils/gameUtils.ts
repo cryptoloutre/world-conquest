@@ -1,7 +1,5 @@
-import { ComputeBudgetProgram, LAMPORTS_PER_SOL, PublicKey, SystemProgram, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
-import { notify } from "./notifications";
-import { connection, program, PROGRAM_ID } from "config";
-import { BN } from "@coral-xyz/anchor";
+import { ComputeBudgetProgram, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { connection } from "config";
 
 export function shufflePlayers(players: string[]) {
     for (var i = players.length - 1; i >= 0; i--) {

@@ -9,11 +9,9 @@ export const Footer: FC = () => {
                     <div className="grid grid-cols-2">
                         <Link href={"https://github.com/cryptoloutre/world-conquest"} target='_blank' className='flex mx-4'>
                             <GithubIcon />
-                            {/* <div className='ml-2'>Github</div> */}
                         </Link>
-                        <Link href={"https://github.com/cryptoloutre/drip-tracker/blob/main/src/components/Footer.tsx"} target='_blank' className='flex mx-4'>
+                        <Link href={"https://x.com/WorldConquestSO"} target='_blank' className='flex mx-4'>
                             <TwitterIcon />
-                            {/* <div className='ml-2'>X</div> */}
                         </Link>
                         
                     </div>
