@@ -75,9 +75,9 @@ export const JoinGameView: FC = ({ }) => {
 
           {!gamesFetched && publicKey && <div>Fetching...</div>}
 
-          {myGames == null && gamesFetched && <div>No game found</div>}
+          {myGames.length == 0 && gamesFetched && <div>No game found</div>}
 
-          {myGames != null && gamesFetched && gameAddress == "" &&
+          {myGames.length != 0 && gamesFetched && gameAddress == "" &&
 
             <div>
               <div>
