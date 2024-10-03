@@ -85,7 +85,7 @@ export const BattlePanel: React.FC<Props> = ({ displayBattlePanel, setDisplayBat
     }
 
     return (
-        <div className='z-20 bg-[#312d29] border border-[#c8ab6e] absolute -top-full left-0 right-0 w-[70%] m-auto' >
+        <div className='z-20 bg-[#312d29] border border-[#c8ab6e] absolute -top-[70%] left-0 right-0 w-[70%] m-auto' >
             {battleInfos.attackerDiceResult.length == 0 ?
                 <div>
                     <div className='text-center text-[#c8ab6e] font-bold text-xl uppercase mt-2'>Battle in progress</div>
