@@ -3,6 +3,8 @@
 
 World Conquest is a turn-based strategy onchain game. Your mission? To conquer the world!
 
+https://github.com/user-attachments/assets/e19c7339-fd53-410b-9ffd-9474b71b2531
+
 ## How to play?
 ### Preparation Phase
 At the beginning of the preparation phase, you will receive a certain number of troops depending on the number of players (3 players = 35 troops, 4 players = 30 troops, 5 players = 25 troops & 6 players = 20 troops).
@@ -35,6 +37,8 @@ as well as the number of troops with which he intends to invade the territory in
 <br />A roll of the dice is then made and the results compared, starting with the strongest on each side. For each comparison, if the defender's die result is equal to or higher than the attacker's, the attacker loses 1 troop. Otherwise, the defender loses 1 troop.
 When the attacker destroys all the defender's troops in a territory, he occupies that territory with the invading troops. The player can immediately use this territory for a new attack and can carry out as many attacks as he wishes.
 <br />If the player has conquered 1 or more territories during its turn, he will receive a bonus card at the end of its turn.
+
+https://github.com/user-attachments/assets/cbc48ba5-a827-4115-9ea8-1eb56033b44e
 
 #### Moving Troops
 Whether or not he has attacked during his turn, the player has the right to move troops from one territory to another bordering territory belonging to him. <br />
